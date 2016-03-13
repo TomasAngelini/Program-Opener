@@ -1,0 +1,365 @@
+#include <iostream>
+#include <math.h>
+#include <windows.h>
+using namespace std; 
+
+int main() {
+
+	HANDLE m_hConsole = GetStdHandle(STD_OUTPUT_HANDLE);		// Allows for modification of colours
+
+	char planetName[40];							// Name of Planet
+	int counter = 0;								// Counter for Name Input
+	int counter2 = 0;								// Counter for printing of Name
+	int blackHole = 0;								// Checks to see if planet is actually black hole
+
+	double speedOfLight = 3e8;						// Speed of light
+
+	double piSquared = 9.86960440109;				// value of pi squared
+	double pi = 3.14159265359;						// Value of Pi
+
+	double powerThree = 3;							// used for pow() function
+	double squareRoot = 1/2;						// used for pow() function
+
+	double weight;									// original weight
+	double massOfPerson;							// calculates mass of person
+
+	double earthMass = 5.9742e+24;					// earth Mass
+	double radiusSquared = 4.05769e+13;				// earth Radius
+
+	double earthMassMultiplier;						// factor for new Planet Mass
+	double earthRadiusMultiplier;					// factor for new planet Radius
+
+	double newPlanetMass;							// mass of new planet
+	double newPlanetRadius;							// radius of new planet
+
+	double mass;									// mass of planet 
+	double G = 6.67408e-11;							// gravitational constant
+
+	double combinedMass;							// combined mass for gravity calc
+	double combinedMassAndRadius;					// combined mass and radius for gravity calc
+
+	double forceNewtons;							// force applied on person in N
+	double gravity;									// acceleration on planet
+	double weightOnPlanet;							// weight of person on planet
+
+	double moonAverageDistanceMultiplier;			// factor for new moon distance
+	double moonMassMultiplier;						// factor for new moon mass
+
+	double moonMass = 7.34767309e+22;				// Moon's mass
+	double moonRadius = 1.737e8;					// Moon's radius
+	double moonAverageDistance = 3.84403e+8;		// Moon's average distance
+
+	double NewMoonMass;								// new Moon Mass
+	double NewMoonAverageDistance;					// new Moon Distance (eccentricity of 1)
+	double newMoonRadius;							// new Moon Radius
+
+	double fourPiSquared = 39.48;					// 4PI^2
+	double newMoonAndNewPlanetMass;					// combines two masses
+	double bottomFraction;							// calculates bottom of fraction for orbital period
+	double fullFraction;							// full orbital period fraction
+	double averageDistanceCubed;					// full fraction multiplied by distance to power of 3
+	double fullEquationSquared;						// full period squared
+	double orbitalPeriodSeconds;					// square root of full equation squared
+	double orbitalPeriodMinutes;					// orbitalperiodseconds / 60
+	double orbitalPeriodHours;						// orbitalperiodminutes / 60
+	double orbitalPeriodDays;						// orbitalperiodhours / 24
+
+	double distanceBetweenPlanetAndMoon;			// new distance
+	double topFractionOrbitalVelocity;				// calculating top of fraction for orbital velocity of moon
+	double fullFractionOrbitalVelocity;				// full fraction of orbital velocity
+	double planetPlusMoonMass;						// two masses added
+	double orbitalVelocity;							// orbital velocity of moon
+
+	double circumferenceOfNewPlanet;				// circumference of new planet
+	double spinOfNewPlanet;							// spin of new planet
+	double rotationalPeriodSeconds;					// rotational period in seconds
+
+	double rotationalPeriodMinutes;					// rotationalperiodseconds / 60;
+	double rotationalPeriodHours;					// rotationalperiodminutes / 60;
+
+	double newPlanetAlbedo;							// amount of reflectivity pf planet from 0-1
+
+	double topVelocityFraction;						// top of fraction for escape velocity
+	double fullFractionSquared;						// full fraction for escape velocity
+	double escapeVelocity;							// escape velocity in m/s
+	double escapeVelocityKilometersPerSecond;		// escape velocity in km/s
+	
+	SetConsoleTextAttribute(m_hConsole, FOREGROUND_RED | FOREGROUND_INTENSITY);
+	cout << "PLANETARY SANDBOX" << endl << endl;
+	SetConsoleTextAttribute(m_hConsole, SET_BACKGROUND_COLOR);
+	cout << "Insert your weight in kg: ";
+	SetConsoleTextAttribute(m_hConsole, FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+	cin >> weight;
+	SetConsoleTextAttribute(m_hConsole, SET_BACKGROUND_COLOR);
+
+	if (weight > 100) {
+
+
+		cout << "You don't weigh that much!" << endl;
+		cout << "Please insert your REAL weight: ";
+		cin >> weight;
+	}
+
+	massOfPerson = weight / 9.80665; 
+
+	cout << "Give a name to your planet (type in ";
+	SetConsoleTextAttribute(m_hConsole, FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+	cout << "'%' ";
+	SetConsoleTextAttribute(m_hConsole, SET_BACKGROUND_COLOR);
+	cout << "when you're done with the name): ";
+	SetConsoleTextAttribute(m_hConsole, FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+
+	while (counter < 40 && planetName[counter-1] != '%') {
+
+		cin >> planetName[counter];
+		counter++;
+		counter2++;
+
+
+	}
+	SetConsoleTextAttribute(m_hConsole, SET_BACKGROUND_COLOR);
+
+	counter = 0;
+
+	cout << "Planet Name: ";
+	while (counter < (counter2 - 1)) {
+
+		cout << planetName[counter];
+		counter++;
+		
+
+
+	}
+	counter = 0;
+
+	cout << endl << endl << "Please insert the mass of your planet: " << endl;
+	cout << "Amount of Earths: ";
+
+	SetConsoleTextAttribute(m_hConsole, FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+	cin >> earthMassMultiplier; 
+	SetConsoleTextAttribute(m_hConsole, SET_BACKGROUND_COLOR);
+	cout << endl << endl;
+	cout << "Please insert the radius of your planet: " << endl;
+	cout << "Amount of Earths: ";
+	SetConsoleTextAttribute(m_hConsole, FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+	cin >> earthRadiusMultiplier;
+	SetConsoleTextAttribute(m_hConsole, SET_BACKGROUND_COLOR);
+	cout << endl << endl;
+	cout << "Please insert the spin of your planet in m/s (Earth Spin = 464.92m/s)" << endl;
+	cout << "Speed of spin in m/s: ";
+	SetConsoleTextAttribute(m_hConsole, FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+	cin >> spinOfNewPlanet;
+	SetConsoleTextAttribute(m_hConsole, SET_BACKGROUND_COLOR);
+//	cout << "Please insert the albedo of your planet (amount of reflectivity of EM radiation)";
+//	cout << "Albedo [0-1]: ";
+//	cin >> newPlanetAlbedo;
+	cout << endl << endl;
+
+	
+
+	newPlanetMass = earthMass * earthMassMultiplier;
+	newPlanetRadius = radiusSquared * earthRadiusMultiplier;
+
+	circumferenceOfNewPlanet = pi * (2 * sqrt(newPlanetRadius));
+	rotationalPeriodSeconds = circumferenceOfNewPlanet / spinOfNewPlanet;
+	rotationalPeriodMinutes = rotationalPeriodSeconds / 60;
+	rotationalPeriodHours = rotationalPeriodMinutes / 60;
+
+	combinedMass = weight * newPlanetMass;
+	combinedMassAndRadius = combinedMass / radiusSquared;
+	forceNewtons = combinedMassAndRadius * G;
+	gravity = forceNewtons / weight;
+	weightOnPlanet = massOfPerson * gravity;
+
+	topVelocityFraction = 2 * (G * newPlanetMass);
+	fullFractionSquared = topVelocityFraction / sqrt(newPlanetRadius);
+	escapeVelocity = sqrt(fullFractionSquared);
+	escapeVelocityKilometersPerSecond = escapeVelocity / 1000;
+
+	if (speedOfLight < escapeVelocity) {
+
+		blackHole = 1;
+	}
+
+	SetConsoleTextAttribute(m_hConsole, FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_INTENSITY);
+
+	cout << "______________________________________________________" << endl;
+
+	SetConsoleTextAttribute(m_hConsole, SET_BACKGROUND_COLOR);
+	cout << "Planet Stats:" << endl << endl;
+	Sleep(2000);
+	cout << "Planet Name: ";
+
+	SetConsoleTextAttribute(m_hConsole, FOREGROUND_BLUE | FOREGROUND_RED | FOREGROUND_INTENSITY);
+	while (counter < (counter2 - 1)) {
+		cout << planetName[counter];
+		counter++;
+	}
+
+	SetConsoleTextAttribute(m_hConsole, SET_BACKGROUND_COLOR);
+
+	cout << endl << endl << "Mass: ";
+	SetConsoleTextAttribute(m_hConsole, FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+	cout << newPlanetMass << "kg" << endl;
+	SetConsoleTextAttribute(m_hConsole, SET_BACKGROUND_COLOR);
+
+	Sleep(1000);
+
+	counter = 0;
+	cout << "Radius: ";
+	SetConsoleTextAttribute(m_hConsole, FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+	cout << sqrt(newPlanetRadius) << "km" << endl;
+	SetConsoleTextAttribute(m_hConsole, SET_BACKGROUND_COLOR);
+	Sleep(1000);
+	cout << "Circumference: ";
+	SetConsoleTextAttribute(m_hConsole, FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+	cout << circumferenceOfNewPlanet << "m" << endl << endl;
+	SetConsoleTextAttribute(m_hConsole, SET_BACKGROUND_COLOR);
+	Sleep(1000);
+	
+
+
+	cout << "Force in newtons: ";
+	SetConsoleTextAttribute(m_hConsole, FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+	cout << forceNewtons << "N" << endl;
+	SetConsoleTextAttribute(m_hConsole, SET_BACKGROUND_COLOR);
+	Sleep(1000);
+
+	cout << "Force of gravity on this planet: "; 
+
+	SetConsoleTextAttribute(m_hConsole, FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+	cout << gravity << " m/s^2" << endl;
+	SetConsoleTextAttribute(m_hConsole, SET_BACKGROUND_COLOR);
+
+	Sleep(1000);
+
+	if (blackHole == 1) {
+		cout << "Your planet is actually a [BLACK HOLE]" << endl;
+	}
+	
+	Sleep(1000);
+
+	cout << "The escape velocity on this planet is: ";
+
+	SetConsoleTextAttribute(m_hConsole, FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+	cout << escapeVelocityKilometersPerSecond << " km/s" << endl;
+	SetConsoleTextAttribute(m_hConsole, SET_BACKGROUND_COLOR);
+
+	Sleep(1000);
+	
+	cout << "Your weight on your planet is: "; 
+
+	SetConsoleTextAttribute(m_hConsole, FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+	cout << weightOnPlanet << " kg" << endl << endl;
+	SetConsoleTextAttribute(m_hConsole, SET_BACKGROUND_COLOR);
+
+	Sleep(1000);
+	
+	cout << "The spin of your planet is: ";
+
+	SetConsoleTextAttribute(m_hConsole, FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+	cout << spinOfNewPlanet << " m/s" << endl;
+	SetConsoleTextAttribute(m_hConsole, SET_BACKGROUND_COLOR);
+
+	Sleep(1000);
+	
+	cout << "One day on your planet is: ";
+
+	SetConsoleTextAttribute(m_hConsole, FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+	cout << rotationalPeriodHours << " hours" << endl << endl;
+	SetConsoleTextAttribute(m_hConsole, SET_BACKGROUND_COLOR);
+
+
+	Sleep(3000);
+	
+	SetConsoleTextAttribute(m_hConsole, FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_INTENSITY);
+	cout << "______________________________________________________" << endl;
+
+	SetConsoleTextAttribute(m_hConsole, SET_BACKGROUND_COLOR);
+	
+
+	cout << "New Moon: " << endl << endl;
+	cout << "Mass of your moon: " << endl;
+	cout << "Amount of Earth Moons: ";
+	SetConsoleTextAttribute(m_hConsole, FOREGROUND_GREEN);
+	cin >> moonMassMultiplier;
+	SetConsoleTextAttribute(m_hConsole, SET_BACKGROUND_COLOR);
+	cout << "Distance from planet to moon using Earth-Moon Distance factor:" << endl;
+	cout << "Distance (Typing '1' gives you the same distance of Earth-Moon): ";
+	SetConsoleTextAttribute(m_hConsole, FOREGROUND_GREEN);
+	cin >> moonAverageDistanceMultiplier;
+	SetConsoleTextAttribute(m_hConsole, SET_BACKGROUND_COLOR);
+	//cin >> NewMoonAverageDistance;
+	cout << endl << endl;
+
+	newMoonRadius = moonRadius * moonMassMultiplier;
+
+	NewMoonMass = moonMass * moonMassMultiplier;
+	NewMoonAverageDistance = moonAverageDistance * moonAverageDistanceMultiplier;
+	bottomFraction = (NewMoonMass + newPlanetMass) * G;
+	fullFraction = fourPiSquared / bottomFraction;
+	averageDistanceCubed = pow(NewMoonAverageDistance, powerThree);
+	fullEquationSquared = fullFraction * averageDistanceCubed;
+	orbitalPeriodSeconds = sqrt(fullEquationSquared);
+	orbitalPeriodMinutes = orbitalPeriodSeconds / 60;
+	orbitalPeriodHours = orbitalPeriodMinutes /60;
+	orbitalPeriodDays = orbitalPeriodHours /24;
+
+	distanceBetweenPlanetAndMoon = sqrt(newPlanetRadius) + NewMoonAverageDistance + newMoonRadius;
+	newMoonAndNewPlanetMass = NewMoonMass + newPlanetMass;
+	topFractionOrbitalVelocity = G * (newMoonAndNewPlanetMass);
+	fullFractionOrbitalVelocity = topFractionOrbitalVelocity / distanceBetweenPlanetAndMoon;
+	orbitalVelocity = sqrt(fullFractionOrbitalVelocity);
+
+
+
+//	cout << "fourPiSquared: " << fourPiSquared << endl;
+//	cout << "BottomFraction: " << bottomFraction << endl;
+//	cout << "Full Fraction: " << fullFraction << endl;
+//	cout << "Average Distance Cubed: " << averageDistanceCubed << endl;
+//	cout << "Full equation squared: " << fullEquationSquared << endl;
+	Sleep(1000);
+
+	cout << "______________________________________________________" << endl;
+	cout << "Moon Stats:" << endl << endl;
+	cout << "Mass: " << NewMoonMass << "kg" << endl;
+	cout << "Radius: " << newMoonRadius << "km" << endl;
+	cout << "Average Distance from Planet to Moon: " << NewMoonAverageDistance << "m" << endl;
+
+
+	if (orbitalPeriodDays > 1) {
+		cout << "Orbital Period: " << orbitalPeriodDays << " days" << endl;
+	}
+	else if (orbitalPeriodDays < 1) {
+
+		if (orbitalPeriodHours > 1) {
+
+			cout << "Orbital Period: " << orbitalPeriodHours << " hours" << endl;
+
+
+		}
+		else {
+
+			cout << "Orbital Period: " << orbitalPeriodMinutes << " minutes" << endl;
+
+		}
+
+
+	}
+	
+	cout << "Orbital Velocity: " << orbitalVelocity << "m/s" << endl << endl;
+
+		
+	cout << "______________________________________________________" << endl;
+
+
+
+
+	system("pause");
+
+
+
+
+	return 0;
+
+}
